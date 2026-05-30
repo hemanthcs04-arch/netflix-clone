@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary SEO -->
+    <title>Netflux — Stream Movies &amp; TV Series Online</title>
+    <meta
+      name="description"
+      content="Netflux lets you browse trending movies and TV series, watch trailers, and discover what to stream next. Powered by TMDB."
+    />
+    <meta
+      name="keywords"
+      content="Netflux, movies, TV series, streaming, watch trailers, trending movies, popular TV shows, online movies"
+    />
+    <meta name="author" content="Netflux" />
+    <meta name="robots" content="index, follow" />
+    <!-- Update after deploy: https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/ -->
+    <link rel="canonical" href="https://github.com/" />
+
+    <!-- Open Graph (Facebook, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Netflux" />
+    <meta property="og:title" content="Netflux — Stream Movies &amp; TV Series" />
+    <meta
+      property="og:description"
+      content="Discover movies and TV series with trailers on Netflux. Browse trending titles and find your next watch."
+    />
+    <meta property="og:image" content="/netflux-logo.png" />
+    <meta property="og:image:alt" content="Netflux logo" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Netflux — Stream Movies &amp; TV Series" />
+    <meta
+      name="twitter:description"
+      content="Browse movies and TV series, watch trailers, explore trending content on Netflux."
+    />
+    <meta name="twitter:image" content="/netflux-logo.png" />
+
+    <!-- App & theme -->
+    <meta name="theme-color" content="#000000" />
+    <meta name="application-name" content="Netflux" />
+    <meta name="apple-mobile-web-app-title" content="Netflux" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/netflux-logo.png" />
+
+    <!-- Performance -->
+    <link rel="preconnect" href="https://api.themoviedb.org" />
+    <link rel="preconnect" href="https://image.tmdb.org" />
+    <link rel="dns-prefetch" href="https://www.youtube.com" />
+
+    <style>
+      #root-fallback {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        color: #fff;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        text-align: center;
+        padding: 2rem;
+      }
+      #root-fallback h1 {
+        color: #e50914;
+        margin: 1rem 0 0.5rem;
+      }
+      #root-fallback code {
+        background: #333;
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+      }
+      #root-fallback a {
+        color: #e50914;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div id="root-fallback">
+        <p>Loading Netflux…</p>
+      </div>
+    </div>
+    <noscript>
+      <div id="root-fallback">
+        <h1>JavaScript required</h1>
+        <p>Enable JavaScript to use Netflux.</p>
+      </div>
+    </noscript>
+    <script>
+      if (window.location.protocol === 'file:') {
+        document.getElementById('root').innerHTML =
+          '<div id="root-fallback">' +
+          '<h1>Cannot open index.html directly</h1>' +
+          '<p>Run <code>npm run dev</code> then open <a href="http://localhost:5173">http://localhost:5173</a></p>' +
+          '</div>';
+      }
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
