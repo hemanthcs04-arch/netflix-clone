@@ -15,37 +15,21 @@ After `npm run build`, open `dist/index.html` via `npm run preview` — that fol
 
 ---
 
-## Publish on GitHub Pages (free hosting)
+## Publish on GitHub Pages
 
-### 1. Push code to GitHub
+**Quick deploy (recommended):**
 
-Create a repo (e.g. `netflic-clone`) and push this project.
+```powershell
+gh auth login
+cd "d:\frontend\netflic clone"
+.\scripts\deploy-github.ps1
+```
 
-### 2. Add TMDB token (required for movies to load)
+Then enable **Settings → Pages → GitHub Actions**. See **DEPLOY.md** for details.
 
-1. GitHub repo → **Settings** → **Secrets and variables** → **Actions**
-2. **New repository secret**
-3. Name: `VITE_TMDB_ACCESS_TOKEN`
-4. Value: your [TMDB API Read Access Token](https://www.themoviedb.org/settings/api)
+Live URL: `https://hemanth04.github.io/netflux/`
 
-### 3. Enable GitHub Pages
-
-1. **Settings** → **Pages**
-2. **Build and deployment** → Source: **GitHub Actions**
-
-### 4. Deploy
-
-Push to `main` (or `master`). The workflow `.github/workflows/deploy.yml` will:
-
-- Build the app (`vite build`)
-- Bundle everything into `dist/` (HTML + JS + CSS + images)
-- Publish to GitHub Pages
-
-Your site will be live at:
-
-`https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/`
-
-Example: `https://hemanth04.github.io/netflic-clone/`
+The workflow `.github/workflows/deploy.yml` builds `dist/` and publishes it on every push to `main`.
 
 ---
 
