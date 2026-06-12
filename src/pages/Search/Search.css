@@ -1,0 +1,115 @@
+.search-page {
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.search-page__content {
+  flex: 1;
+  padding: 100px var(--page-padding) 50px;
+}
+
+.search-page__title {
+  font-size: var(--font-size-2xl);
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+}
+
+.search-page__filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.search-page__filter-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--text-secondary);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+}
+
+.search-page__filter-btn:hover {
+  border-color: white;
+  color: white;
+}
+
+.search-page__filter-btn.active {
+  background-color: white;
+  color: black;
+  border-color: white;
+}
+
+.search-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.search-page__card {
+  position: relative;
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--bg-secondary);
+  transition: transform var(--transition-fast);
+}
+
+.search-page__card:hover {
+  transform: scale(1.05);
+  z-index: 2;
+  box-shadow: var(--shadow-card-hover);
+}
+
+.search-page__card img {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+}
+
+.search-page__no-image {
+  width: 100%;
+  aspect-ratio: 2/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-card);
+  padding: 20px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.search-page__card-info {
+  padding: 10px;
+}
+
+.search-page__card-title {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-page__card-year {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.search-page__empty {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.search-page__empty p {
+  font-size: var(--font-size-xl);
+  margin-bottom: 10px;
+}
+
+.search-page__suggestions {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base) !important;
+}

@@ -1,19 +1,19 @@
-import { StrictMode } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
-import ErrorBoundary from './components/ErrorBoundary';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+import { AuthProvider } from './hooks/useAuth';
 import './index.css';
-import App from './App.jsx';
 
 const rootEl = document.getElementById('root');
-
-if (!rootEl) {
-  throw new Error('Root element #root not found in index.html');
-}
+if (!rootEl) throw new Error('Root element #root not found in index.html');
 
 createRoot(rootEl).render(
-  <StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
-  </StrictMode>
+  <React.StrictMode>
+    <AuthProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AuthProvider>
+  </React.StrictMode>
 );

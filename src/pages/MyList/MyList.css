@@ -1,0 +1,147 @@
+.mylist-page {
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+.mylist-page__content {
+  flex: 1;
+  padding: 100px var(--page-padding) 50px;
+}
+
+.mylist-page__title {
+  font-size: var(--font-size-2xl);
+  margin-bottom: 30px;
+}
+
+.mylist-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.mylist-page__card {
+  position: relative;
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--bg-secondary);
+  aspect-ratio: 2/3;
+}
+
+.mylist-page__card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-fast);
+}
+
+.mylist-page__no-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  color: var(--text-secondary);
+  background-color: var(--bg-card);
+}
+
+.mylist-page__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 15px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.mylist-page__card:hover img {
+  transform: scale(1.05);
+}
+
+.mylist-page__card:hover .mylist-page__overlay {
+  opacity: 1;
+}
+
+.mylist-page__remove-btn {
+  align-self: flex-end;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid white;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all var(--transition-fast);
+}
+
+.mylist-page__remove-btn:hover {
+  background: white;
+  color: black;
+}
+
+.mylist-page__info {
+  margin-top: auto;
+}
+
+.mylist-page__item-title {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.mylist-page__item-year {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.mylist-page__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.mylist-page__empty-icon {
+  font-size: 80px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.mylist-page__empty h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.mylist-page__empty p {
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+.mylist-page__browse-btn {
+  background-color: white;
+  color: black;
+  padding: 12px 30px;
+  border-radius: var(--border-radius-sm);
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color var(--transition-fast);
+}
+
+.mylist-page__browse-btn:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}

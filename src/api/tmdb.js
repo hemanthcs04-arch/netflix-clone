@@ -1,146 +1,139 @@
-const TMDB_BASE = 'https://api.themoviedb.org/3';
+const BASE_URL = 'https://api.themoviedb.org/3';
 const ACCESS_TOKEN = import.meta.env.VITE_TMDB_ACCESS_TOKEN;
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
-export const IMAGE_BASE = 'https://image.tmdb.org/t/p/original';
-export const POSTER_BASE = 'https://image.tmdb.org/t/p/w500';
+const IMAGE_BASE = 'https://image.tmdb.org/t/p';
+export const BACKDROP_SIZE = 'original';
+export const POSTER_SIZE = 'w500';
+export const PROFILE_SIZE = 'w185';
 
-const PLACEHOLDERS = new Set([
-  'your_tmdb_api_key_here',
-  'your_access_token_here',
-  'paste_your_access_token_here',
-  'PASTE_YOUR_ACCESS_TOKEN_HERE',
-  '<<access_token>>',
-  '',
-]);
+/* ---------- helpers ---------- */
 
-function buildUrl(endpoint, params = {}) {
-  const [path, queryString] = endpoint.split('?');
-  const search = new URLSearchParams(queryString ?? '');
-  search.set('language', 'en-US');
+const headers = {
+  Authorization: `Bearer ${ACCESS_TOKEN}`,
+  'Content-Type': 'application/json;charset=utf-8',
+};
 
-  // v3 API key auth (optional if using Bearer token)
-  if (API_KEY && !PLACEHOLDERS.has(API_KEY)) {
-    search.set('api_key', API_KEY);
-  }
-
-  Object.entries(params).forEach(([key, value]) => {
-    if (value != null && value !== '') search.set(key, value);
-  });
-
-  return `${TMDB_BASE}${path}?${search}`;
-}
-
-function authHeaders() {
-  if (ACCESS_TOKEN && !PLACEHOLDERS.has(ACCESS_TOKEN)) {
-    return { Authorization: `Bearer ${ACCESS_TOKEN}` };
-  }
-  return {};
-}
-
-export function hasApiKey() {
-  const hasToken = ACCESS_TOKEN && !PLACEHOLDERS.has(ACCESS_TOKEN);
-  const hasKey = API_KEY && !PLACEHOLDERS.has(API_KEY);
-  return Boolean(hasToken || hasKey);
-}
-
-async function tmdbFetch(endpoint, params = {}) {
-  if (!hasApiKey()) {
-    throw new Error('MISSING_API_KEY');
-  }
-
-  const res = await fetch(buildUrl(endpoint, params), {
-    headers: {
-      accept: 'application/json',
-      ...authHeaders(),
-    },
-  });
-
+async function tmdbFetch(endpoint) {
+  const sep = endpoint.includes('?') ? '&' : '?';
+  const url = `${BASE_URL}${endpoint}${sep}language=en-US`;
+  const res = await fetch(url, { headers });
   if (!res.ok) {
-    const body = await res.json().catch(() => ({}));
-    const msg = body.status_message || res.statusText;
-    if (res.status === 401) {
-      throw new Error(
-        'Invalid TMDB credentials. Check VITE_TMDB_ACCESS_TOKEN in your .env file.'
-      );
-    }
-    throw new Error(`TMDB error (${res.status}): ${msg}`);
+    throw new Error(`TMDB ${res.status}: ${res.statusText}`);
   }
-
   return res.json();
 }
 
-export function getImageUrl(path, size = 'original') {
+/* ---------- Image URLs ---------- */
+
+export function getBackdropUrl(path) {
   if (!path) return null;
-  const base = size === 'poster' ? POSTER_BASE : IMAGE_BASE;
-  return `${base}${path}`;
+  return `${IMAGE_BASE}/${BACKDROP_SIZE}${path}`;
 }
 
-export async function fetchMovies(endpoint) {
-  const data = await tmdbFetch(endpoint);
-  return data.results ?? [];
+export function getPosterUrl(path) {
+  if (!path) return null;
+  return `${IMAGE_BASE}/${POSTER_SIZE}${path}`;
 }
 
-/** Keep only items matching mediaType; tag each item for modal/routing */
-export function filterByMediaType(items, mediaType) {
-  return items
-    .filter((item) => !item.media_type || item.media_type === mediaType)
-    .map((item) => ({ ...item, media_type: mediaType }));
+export function getProfileUrl(path) {
+  if (!path) return null;
+  return `${IMAGE_BASE}/${PROFILE_SIZE}${path}`;
 }
 
-export async function fetchCategoryRows(endpoint, mediaType) {
-  const items = await fetchMovies(endpoint);
-  return filterByMediaType(items, mediaType);
+/* ---------- Browse page data ---------- */
+
+export async function fetchTrending() {
+  const data = await tmdbFetch('/trending/all/week');
+  return data.results;
 }
 
-/** Same as: GET /movie/{id}?append_to_response=videos + Bearer token */
-export async function fetchMovieWithVideos(movieId, mediaType = 'movie') {
-  return tmdbFetch(`/${mediaType}/${movieId}`, {
-    append_to_response: 'videos',
-  });
+export async function fetchNetflixOriginals() {
+  const data = await tmdbFetch('/discover/tv?with_networks=213');
+  return data.results;
 }
 
-export async function fetchVideos(movieId, mediaType = 'movie') {
-  const data = await fetchMovieWithVideos(movieId, mediaType);
-  return data.videos?.results ?? [];
+export async function fetchTopRated() {
+  const data = await tmdbFetch('/movie/top_rated');
+  return data.results;
 }
 
-export function pickTrailerKey(videos, types = ['Trailer', 'Teaser', 'Clip', 'Featurette']) {
-  for (const type of types) {
-    const match = videos.find((v) => v.site === 'YouTube' && v.type === type);
-    if (match) return match.key;
-  }
-  return videos.find((v) => v.site === 'YouTube')?.key ?? null;
+export async function fetchByGenre(genreId) {
+  const data = await tmdbFetch(`/discover/movie?with_genres=${genreId}`);
+  return data.results;
 }
 
-/** GET /tv/{series_id} */
-export async function fetchTvDetails(seriesId) {
-  return tmdbFetch(`/tv/${seriesId}`);
+export async function fetchPopularTV() {
+  const data = await tmdbFetch('/tv/popular');
+  return data.results;
 }
 
-/** GET /tv/{series_id}/season/{season_number} */
-export async function fetchTvSeason(seriesId, seasonNumber) {
-  return tmdbFetch(`/tv/${seriesId}/season/${seasonNumber}`);
+export async function fetchTrendingTV() {
+  const data = await tmdbFetch('/trending/tv/week');
+  return data.results;
 }
 
-/**
- * GET /tv/{series_id}/season/{season_number}/episode/{episode_number}/videos
- */
-export async function fetchEpisodeVideos(seriesId, seasonNumber, episodeNumber) {
-  const data = await tmdbFetch(
-    `/tv/${seriesId}/season/${seasonNumber}/episode/${episodeNumber}/videos`
-  );
-  return data.results ?? [];
+export async function fetchTVByGenre(genreId) {
+  const data = await tmdbFetch(`/discover/tv?with_genres=${genreId}`);
+  return data.results;
 }
 
-export function isTvShow(item) {
-  return item?.media_type === 'tv' || Boolean(item?.first_air_date && !item?.title);
+/* ---------- Detail page ---------- */
+
+export async function fetchMovieDetail(id) {
+  return tmdbFetch(`/movie/${id}?append_to_response=videos,credits,similar,images`);
 }
 
-export async function searchMovies(query) {
-  if (!query.trim()) return [];
-  const data = await tmdbFetch('/search/multi', { query: query.trim() });
-  return (data.results ?? []).filter(
+export async function fetchTVDetail(id) {
+  return tmdbFetch(`/tv/${id}?append_to_response=videos,credits,similar,images`);
+}
+
+/* ---------- Search ---------- */
+
+export async function searchMulti(query) {
+  const data = await tmdbFetch(`/search/multi?query=${encodeURIComponent(query)}&include_adult=false`);
+  return data.results.filter(
     (item) => item.media_type === 'movie' || item.media_type === 'tv'
   );
 }
+
+/* ---------- Genres ---------- */
+
+export async function fetchGenres() {
+  const data = await tmdbFetch('/genre/movie/list');
+  return data.genres;
+}
+
+/* ---------- Trailer helper ---------- */
+
+export function pickTrailerKey(videos) {
+  if (!videos || !videos.results || videos.results.length === 0) return null;
+  const youtubeVideos = videos.results.filter((v) => v.site === 'YouTube');
+  const trailer = youtubeVideos.find((v) => v.type === 'Trailer');
+  if (trailer) return trailer.key;
+  const teaser = youtubeVideos.find((v) => v.type === 'Teaser');
+  if (teaser) return teaser.key;
+  const clip = youtubeVideos.find((v) => v.type === 'Clip');
+  if (clip) return clip.key;
+  if (youtubeVideos.length > 0) return youtubeVideos[0].key;
+  return null;
+}
+
+/* ---------- Predefined row configs ---------- */
+
+export const MOVIE_ROWS = [
+  { title: 'Trending Now', fetcher: fetchTrending },
+  { title: 'Top Rated', fetcher: fetchTopRated },
+  { title: 'Action Movies', fetcher: () => fetchByGenre(28) },
+  { title: 'Comedy Movies', fetcher: () => fetchByGenre(35) },
+  { title: 'Horror Movies', fetcher: () => fetchByGenre(27) },
+  { title: 'Romance Movies', fetcher: () => fetchByGenre(10749) },
+  { title: 'Documentaries', fetcher: () => fetchByGenre(99) },
+];
+
+export const TV_ROWS = [
+  { title: 'Popular TV Shows', fetcher: fetchPopularTV },
+  { title: 'Trending Series', fetcher: fetchTrendingTV },
+  { title: 'Drama Series', fetcher: () => fetchTVByGenre(18) },
+  { title: 'Crime Series', fetcher: () => fetchTVByGenre(80) },
+  { title: 'Sci-Fi & Fantasy', fetcher: () => fetchTVByGenre(10765) },
+];

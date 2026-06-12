@@ -1,51 +1,278 @@
+/* ============================================
+   NETFLIX CLONE — DESIGN SYSTEM & GLOBAL STYLES
+   ============================================ */
+
+/* --- CSS Custom Properties (Design Tokens) --- */
+:root {
+  /* Brand Colors */
+  --netflix-red: #E50914;
+  --netflix-red-hover: #F40612;
+  --netflix-red-dark: #B20710;
+
+  /* Backgrounds */
+  --bg-primary: #141414;
+  --bg-secondary: #181818;
+  --bg-card: #2F2F2F;
+  --bg-card-hover: #3a3a3a;
+  --bg-overlay: rgba(0, 0, 0, 0.7);
+  --bg-overlay-light: rgba(0, 0, 0, 0.4);
+  --bg-input: #333;
+  --bg-input-focus: #454545;
+
+  /* Text Colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: #B3B3B3;
+  --text-muted: #808080;
+  --text-link: #B3B3B3;
+  --text-link-hover: #FFFFFF;
+
+  /* Typography */
+  --font-primary: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 3rem;
+  --font-size-hero: 4rem;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+  --page-padding: 4%;
+
+  /* Borders */
+  --border-radius-sm: 4px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+  --border-color: #404040;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-medium: 300ms ease;
+  --transition-slow: 500ms ease;
+
+  /* Sizing */
+  --navbar-height: 68px;
+  --card-width: 240px;
+  --card-width-large: 200px;
+  --card-height: 135px;
+  --card-height-large: 300px;
+
+  /* Z-index Scale */
+  --z-base: 1;
+  --z-card-hover: 10;
+  --z-navbar: 100;
+  --z-dropdown: 200;
+  --z-modal-backdrop: 900;
+  --z-modal: 1000;
+
+  /* Shadows */
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.8);
+  --shadow-dropdown: 0 4px 20px rgba(0, 0, 0, 0.6);
+  --shadow-modal: 0 16px 60px rgba(0, 0, 0, 0.9);
+}
+
+/* --- CSS Reset & Base Styles --- */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background-color: #141414;
-  color: #fff;
-  -webkit-font-smoothing: antialiased;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
 #root {
   min-height: 100vh;
 }
 
-button {
-  font-family: inherit;
+a {
+  color: var(--text-link);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--text-link-hover);
 }
 
 img {
+  display: block;
   max-width: 100%;
 }
 
-.app-fallback {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  text-align: center;
-  background: #141414;
-  color: #fff;
+button {
+  font-family: var(--font-primary);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+  color: inherit;
 }
 
-.app-fallback h1 {
-  color: #e50914;
+input {
+  font-family: var(--font-primary);
+  outline: none;
+  border: none;
 }
 
-.app-fallback code {
-  background: #333;
-  padding: 0.2rem 0.5rem;
+ul, ol {
+  list-style: none;
+}
+
+/* --- Scrollbar Styles --- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card);
   border-radius: 4px;
 }
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* --- Utility Classes --- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.container {
+  width: 100%;
+  padding-left: var(--page-padding);
+  padding-right: var(--page-padding);
+}
+
+/* --- Animations --- */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* --- Loading Spinner --- */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.loading-spinner__circle {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--bg-card);
+  border-top-color: var(--netflix-red);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* --- Responsive Breakpoints (used via media queries in components) ---
+   Mobile:  < 600px
+   Tablet:  600px - 1024px
+   Desktop: > 1024px
+   Wide:    > 1400px
+*/

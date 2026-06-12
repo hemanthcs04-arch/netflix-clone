@@ -1,0 +1,17 @@
+.browse {
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+}
+
+.browse__content {
+  margin-top: -100px;
+  position: relative;
+  z-index: 5;
+  padding-bottom: 50px;
+}
+
+@media (max-width: 768px) {
+  .browse__content {
+    margin-top: -50px;
+  }
+}
